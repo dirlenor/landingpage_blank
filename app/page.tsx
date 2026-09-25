@@ -61,7 +61,10 @@ export default function Home() {
     const ctx = gsap.context(() => {
       mm.add({ desktop: '(min-width: 1025px)', tablet: '(min-width: 701px) and (max-width: 1024px)', mobile: '(max-width: 700px)', reduce: '(prefers-reduced-motion: reduce)' }, context => {
         const { mobile, tablet, reduce } = context.conditions!;
-        if (reduce) return;
+        if (reduce) {
+          host.classList.remove('is-cinematic');
+          return;
+        }
         let alive = true;
         host.classList.add('is-cinematic');
         const w = () => host.clientWidth;
@@ -75,8 +78,8 @@ export default function Home() {
         gsap.ticker.add(tick);
         gsap.ticker.lagSmoothing(0);
 
-        gsap.set('.scene-03, .scene-06', { yPercent: 100 });
-        gsap.set('.scene-04', { clipPath: 'inset(100% 0% 0% 0%)' });
+        gsap.set('.scene-03, .scene-06', { autoAlpha: 1, yPercent: 100 });
+        gsap.set('.scene-04', { autoAlpha: 1, clipPath: 'inset(100% 0% 0% 0%)' });
         gsap.set('.scene-02, .scene-05, .origin-portrait, .selected-photo, .gallery-card', { autoAlpha: 0 });
         gsap.set('.scene-03 .line, .scene-05 .line', { yPercent: 110 });
         gsap.set('.scene-03 .support-photo', { x: -80 * travel, rotation: -5 });
@@ -91,14 +94,15 @@ export default function Home() {
         gsap.set('.origin-backplate', { clipPath: 'inset(100% 0% 0% 0%)' });
         // The pre-hydration CSS hides these layers; restore their end states before GSAP owns the entry.
         gsap.set('.environment, .hero-left .word, .hero-right .word, .person-enter, .hero-detail', { autoAlpha: 1 });
+        host.classList.add('is-ready');
 
         // A separate load-only entrance owns inner wrappers, never scroll transforms.
-        const entrance = gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.05 } });
-        entrance.from('.environment', { autoAlpha: 0, scale: .94, duration: 1.25 })
-          .from('.hero-left .word', { yPercent: 110, stagger: .08 }, '<0.18')
-          .from('.hero-right .word', { xPercent: 110, stagger: .08 }, '<0.15')
-          .from('.person-enter', { scale: .82, y: 100, rotation: -2 }, '<0.1')
-          .from('.hero-detail', { opacity: 0, y: 12, stagger: .06, duration: .65 }, '-=0.55');
+        const entrance = gsap.timeline({ defaults: { ease: 'power3.out', duration: .95 } });
+        entrance.from('.environment', { autoAlpha: 0, duration: .7 })
+          .from('.hero-left .word', { yPercent: 110, stagger: .07 }, '-=.22')
+          .from('.hero-right .word', { xPercent: 110, stagger: .07 }, '<.12')
+          .from('.person-enter', { autoAlpha: 0, scale: .94, y: 55, rotation: -1.5, duration: 1.05 }, '<.12')
+          .from('.hero-detail', { opacity: 0, y: 12, stagger: .06, duration: .6 }, '-=.42');
         let current = -1;
         const sceneEls = $('.scene') as HTMLElement[];
         const progressLine = $('.progress-fill')[0] as HTMLElement;
@@ -213,7 +217,7 @@ export default function Home() {
         return () => {
           alive = false;
           gsap.ticker.remove(tick); gsap.ticker.remove(promote); lenis.off('scroll', ScrollTrigger.update); lenis.destroy();
-          masterRef.current = null; lenisRef.current = null; host.classList.remove('is-cinematic');
+          masterRef.current = null; lenisRef.current = null; host.classList.remove('is-cinematic', 'is-ready');
           sceneEls.forEach(el => { el.inert = false; el.removeAttribute('aria-hidden'); });
           $('[data-promoted]').forEach((el: HTMLElement) => { el.style.willChange = ''; el.removeAttribute('data-promoted'); });
         };
@@ -241,7 +245,7 @@ export default function Home() {
       <button className="menu-toggle" aria-label="Open menu" aria-expanded={menuOpen} aria-controls="chapter-menu" onClick={() => { menu.current?.showModal(); setMenuOpen(true); lenisRef.current?.stop(); }}><span /><span /></button>
     </header>
 
-    <main ref={root} className="experience" data-scene="1">
+    <main ref={root} className="experience is-cinematic" data-scene="1">
       <div className="stage">
         <div className="opening-world" aria-hidden="true">
           <div className="environment"><Photo name="alpine" /></div>

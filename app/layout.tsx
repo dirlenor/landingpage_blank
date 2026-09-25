@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import '@fontsource/anton/latin-400.css';
 import '@fontsource/manrope/latin-400.css';
 import '@fontsource/manrope/latin-600.css';
@@ -12,5 +11,5 @@ export const metadata: Metadata = {
   description: 'An independent creative studio. Ideas, culture, and experiences that move people.',
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" suppressHydrationWarning><body>{children}<Script id="enable-motion-entry" strategy="beforeInteractive">{`document.documentElement.classList.add('js');`}</Script></body></html>;
+  return <html lang="en"><body>{children}<noscript><style>{`.experience.is-cinematic{height:auto}.experience.is-cinematic .scene{position:relative;height:100svh;overflow:hidden}.experience.is-cinematic .opening-world{display:none}.experience.is-cinematic .scene-01{background:var(--paper) url('/assets/web/hero-person.webp') 50% 100%/auto 92% no-repeat}.experience.is-cinematic .scene-02{background:url('/assets/web/hero-person.webp') 85% 150%/auto 120% no-repeat,url('/assets/web/alpine.webp') center/cover}.experience.is-cinematic .scene-05{background:url('/assets/web/coast.webp') center/cover}.environment,.hero-left .word,.hero-right .word,.person-enter,.hero-detail,.experience.is-cinematic .scene:not(.scene-01){opacity:1!important;visibility:visible!important}`}</style></noscript></body></html>;
 }
