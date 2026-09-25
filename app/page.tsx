@@ -68,7 +68,7 @@ export default function Home() {
         const h = () => host.querySelector<HTMLElement>('.stage')!.clientHeight;
         const travel = mobile ? .48 : tablet ? .7 : 1;
         const $ = gsap.utils.selector(host);
-        const lenis = new Lenis({ lerp: .105, smoothWheel: true, syncTouch: false });
+        const lenis = new Lenis({ lerp: .08, smoothWheel: true, syncTouch: false, wheelMultiplier: .9 });
         lenisRef.current = lenis;
         lenis.on('scroll', ScrollTrigger.update);
         const tick = (time: number) => lenis.raf(time * 1000);
@@ -100,10 +100,10 @@ export default function Home() {
         const sceneEls = $('.scene') as HTMLElement[];
         const progressLine = $('.progress-fill')[0] as HTMLElement;
         const master = gsap.timeline({
-          defaults: { ease: 'expo.inOut' },
+          defaults: { ease: 'power2.inOut' },
           scrollTrigger: {
             id: 'blank-master', trigger: host, pin: $('.stage')[0], start: 'top top', end: 'bottom bottom',
-            pinSpacing: false, scrub: .25, anticipatePin: 1, invalidateOnRefresh: true,
+            pinSpacing: false, scrub: .45, anticipatePin: 1, invalidateOnRefresh: true,
             onUpdate: self => { if (self.progress > .01 && entrance.progress() < 1) entrance.progress(1); },
           },
           onUpdate: () => {
@@ -132,7 +132,7 @@ export default function Home() {
           .to('.environment img', { scale: 1.08, duration: 10 }, '<')
           .to('.hero-person', { scale: mobile ? 1.38 : 1.65, x: () => w() * (mobile ? .12 : .15), y: () => h() * .20, duration: 10 }, '<')
           .set('.scene-02', { autoAlpha: 1 }, 19)
-          .from('.immersive-title', { y: 45, clipPath: 'inset(100% 0% 0% 0%)', duration: 4, ease: 'power4.out' }, 19)
+          .from('.immersive-title', { y: 45, clipPath: 'inset(100% 0% 0% 0%)', duration: 4, ease: 'power2.out' }, 19)
           .from('.immersive-detail', { y: 15, opacity: 0, duration: 3, stagger: .25 }, 21)
           .to('.environment img', { scale: 1.13, duration: 8, ease: 'sine.inOut' }, 22)
           .to('.hero-person', { x: () => w() * (mobile ? .10 : .13), duration: 8, ease: 'sine.inOut' }, '<');
@@ -140,10 +140,10 @@ export default function Home() {
         master.to('.scene-03', { yPercent: 0, duration: 8 }, 30)
           .to('.environment, .hero-person', { yPercent: -8, duration: 8 }, '<')
           .to('.scene-02', { yPercent: -35, duration: 8 }, '<')
-          .to('.scene-03 .line', { yPercent: 0, duration: 4, stagger: .65, ease: 'power4.out' }, 35)
-          .to('.scene-03 .support-photo', { x: 0, rotation: -2, duration: 5, ease: 'expo.out' }, 36)
+          .to('.scene-03 .line', { yPercent: 0, duration: 4, stagger: .65, ease: 'power2.out' }, 35)
+          .to('.scene-03 .support-photo', { x: 0, rotation: -2, duration: 5, ease: 'power2.out' }, 36)
           .set('.origin-portrait', { autoAlpha: 1 }, 36)
-          .fromTo('.origin-portrait', { x: 120 * travel, y: () => h() * .4, rotation: 5 }, { x: 0, y: 0, rotation: 1, duration: 6, ease: 'expo.out', immediateRender: false }, 36)
+          .fromTo('.origin-portrait', { x: 120 * travel, y: () => h() * .4, rotation: 5 }, { x: 0, y: 0, rotation: 1, duration: 6, ease: 'power2.out', immediateRender: false }, 36)
           .to('.statement-note, .belief-copy', { y: 0, opacity: 1, duration: 3, stagger: .2 }, 40);
         // The right portrait travels to the shared centre before the collage opens.
         const centerOriginX = () => w() * (mobile ? -.20 : -.30);
@@ -152,28 +152,28 @@ export default function Home() {
           .to('.origin-portrait', { x: centerOriginX, y: centerOriginY, rotation: 0, scale: .8, duration: 5 }, '<')
           .to('.origin-backplate', { clipPath: 'inset(0% 0% 0% 0%)', duration: 4 }, 49)
           .to('.scene-04', { clipPath: 'inset(0% 0% 0% 0%)', duration: 5 }, 49)
-          .to('.gallery-title', { scale: 1, opacity: 1, duration: 6, ease: 'power4.out' }, 52);
+          .to('.gallery-title', { scale: 1, opacity: 1, duration: 6, ease: 'power2.out' }, 52);
         photos.forEach((photo, i) => {
           if (mobile && i >= 5) return;
           const card = $(`.card-${i}`);
           const px = mobile ? photo.mx : photo.x;
           const py = mobile ? photo.my : photo.y;
           master.set(card, { autoAlpha: 1 }, 53 + i * .2)
-            .to(card, { x: () => w() * px, y: () => h() * py, scale: 1, rotation: photo.r * (mobile ? .45 : 1), duration: 5, ease: 'power4.out' }, 53 + i * .2)
+            .to(card, { x: () => w() * px, y: () => h() * py, scale: 1, rotation: photo.r * (mobile ? .45 : 1), duration: 5, ease: 'power2.out' }, 53 + i * .2)
             .to(card, { y: () => h() * (py + (py < 0 ? -.025 : .025)), duration: 9, ease: 'sine.inOut' }, 59)
             .to(card, { x: () => w() * (px < 0 ? -1.15 : 1.15), y: () => h() * py * 2.6, duration: 8, ease: 'power3.inOut' }, 68 + i * .12);
         });
-        master.to('.origin-portrait', { x: () => centerOriginX() - w() * .13, y: () => centerOriginY() + h() * .06, scale: mobile ? .4 : .43, rotation: -7, duration: 6, ease: 'power4.out' }, 53)
+        master.to('.origin-portrait', { x: () => centerOriginX() - w() * .13, y: () => centerOriginY() + h() * .06, scale: mobile ? .4 : .43, rotation: -7, duration: 6, ease: 'power2.out' }, 53)
           .set('.selected-photo', { autoAlpha: 1 }, 53)
-          .to('.selected-photo', { x: () => w() * (mobile ? .08 : .15), y: () => -h() * .07, scale: 1, rotation: mobile ? 4 : 9, duration: 6, ease: 'power4.out' }, 53)
+          .to('.selected-photo', { x: () => w() * (mobile ? .08 : .15), y: () => -h() * .07, scale: 1, rotation: mobile ? 4 : 9, duration: 6, ease: 'power2.out' }, 53)
           .to('.selected-photo .selected-image', { scale: mobile ? .775 : .635, duration: 9, ease: 'sine.inOut' }, 59)
           .to('.origin-portrait', { x: () => -w() * 1.4, rotation: -12, duration: 8 }, 68)
           .to('.gallery-title', { scale: 1.3, yPercent: -15, duration: 9 }, 68)
           .to('.selected-photo', { x: 0, y: 0, rotation: 0, duration: 4, ease: 'power3.inOut' }, 68)
-          .to('.selected-photo', { clipPath: 'inset(0% 0% 0% 0%)', duration: 6, ease: 'expo.inOut' }, 71)
-          .to('.selected-image', { xPercent: 0, scale: 1, duration: 6, ease: 'expo.inOut' }, '<')
+          .to('.selected-photo', { clipPath: 'inset(0% 0% 0% 0%)', duration: 6, ease: 'power2.inOut' }, 71)
+          .to('.selected-image', { xPercent: 0, scale: 1, duration: 6, ease: 'power2.inOut' }, '<')
           .set('.scene-05', { autoAlpha: 1 }, 74)
-          .to('.scene-05 .line', { yPercent: 0, duration: 4, stagger: .7, ease: 'power4.out' }, 74)
+          .to('.scene-05 .line', { yPercent: 0, duration: 4, stagger: .7, ease: 'power2.out' }, 74)
           .from('.cinematic-detail', { opacity: 0, y: 12, duration: 3, stagger: .25 }, 78)
           .to('.selected-photo .selected-image', { scale: 1.08, duration: 8, ease: 'sine.inOut' }, 77)
           .to('.scene-05 .line', { xPercent: i => [-3, 2, -1][i] * (mobile ? .4 : 1), duration: 8, ease: 'sine.inOut' }, 77);
@@ -181,7 +181,7 @@ export default function Home() {
         master.to('.scene-06', { yPercent: 0, duration: 6 }, 85)
           .to('.selected-photo', { yPercent: -15, scale: 1.04, duration: 6 }, '<')
           .to('.scene-05', { yPercent: -30, duration: 6 }, '<')
-          .to('.contact-reach, .contact-out', { xPercent: 0, duration: 4, stagger: .35, ease: 'expo.out' }, 90)
+          .to('.contact-reach, .contact-out', { xPercent: 0, duration: 4, stagger: .35, ease: 'power2.out' }, 90)
           .to('.contact-details', { y: 0, opacity: 1, duration: 2.5, stagger: .2 }, 92)
           .to('.landscape-circle', { scale: 1, rotation: 0, duration: 3, ease: 'back.out(1.2)' }, 91.5)
           .to('.contact-details', { y: 28, duration: 3 }, 97)
