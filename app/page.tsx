@@ -89,10 +89,13 @@ export default function Home() {
         gsap.set('.selected-image', { xPercent: mobile ? -9 : -16, scale: mobile ? .76 : .62 });
         gsap.set('.gallery-card', { xPercent: -50, yPercent: -50, x: 0, y: 0, scale: .2, rotation: 0 });
         gsap.set('.origin-backplate', { clipPath: 'inset(100% 0% 0% 0%)' });
+        // The pre-hydration CSS hides these layers; restore their end states before GSAP owns the entry.
+        gsap.set('.environment, .hero-left .word, .hero-right .word, .person-enter, .hero-detail', { autoAlpha: 1 });
 
         // A separate load-only entrance owns inner wrappers, never scroll transforms.
         const entrance = gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.05 } });
-        entrance.from('.hero-left .word', { yPercent: 110, stagger: .08 })
+        entrance.from('.environment', { autoAlpha: 0, scale: .94, duration: 1.25 })
+          .from('.hero-left .word', { yPercent: 110, stagger: .08 }, '<0.18')
           .from('.hero-right .word', { xPercent: 110, stagger: .08 }, '<0.15')
           .from('.person-enter', { scale: .82, y: 100, rotation: -2 }, '<0.1')
           .from('.hero-detail', { opacity: 0, y: 12, stagger: .06, duration: .65 }, '-=0.55');
