@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "name": "desktop",
+      "images": true,
+      "overflow": false,
+      "cinematic": true,
+      "opened": true,
+      "closed": true,
+      "navScene": "4",
+      "navTop": 0,
+      "reverseScene": "1",
+      "focusable": 1,
+      "pass": true
+    },
+    {
+      "name": "tablet",
+      "images": true,
+      "overflow": false,
+      "cinematic": true,
+      "opened": true,
+      "closed": true,
+      "navScene": "4",
+      "navTop": 0,
+      "reverseScene": "1",
+      "focusable": 1,
+      "pass": true
+    },
+    {
+      "name": "mobile",
+      "images": true,
+      "overflow": false,
+      "cinematic": true,
+      "opened": true,
+      "closed": true,
+      "navScene": "4",
+      "navTop": 0,
+      "reverseScene": "1",
+      "focusable": 1,
+      "pass": true
+    },
+    {
+      "name": "compact",
+      "images": true,
+      "overflow": false,
+      "cinematic": true,
+      "opened": true,
+      "closed": true,
+      "navScene": "4",
+      "navTop": 0,
+      "reverseScene": "1",
+      "focusable": 1,
+      "pass": true
+    },
+    {
+      "name": "reduced",
+      "images": true,
+      "overflow": false,
+      "cinematic": false,
+      "opened": true,
+      "closed": true,
+      "navScene": "1",
+      "navTop": 0,
+      "reverseScene": "1",
+      "focusable": 6,
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "adaptive": {
+    "mobilePins": 1,
+    "reducedPins": 0,
+    "readable": 6,
+    "restoredPins": 1,
+    "pass": true
+  },
+  "pass": true
+}

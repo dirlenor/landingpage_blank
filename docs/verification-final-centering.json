@@ -1,0 +1,82 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "gallery": {
+      "x": 331.1999969482422,
+      "y": 262.58409118652344
+    },
+    "centreCorrect": true,
+    "circle": {
+      "radius": 1202.41259765625,
+      "needed": 1173.8256253613154,
+      "covered": true
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "gallery": {
+      "x": 235.51998138427734,
+      "y": 224.08340454101562
+    },
+    "centreCorrect": true,
+    "circle": {
+      "radius": 895.77294921875,
+      "needed": 872.3823829258711,
+      "covered": true
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "gallery": {
+      "x": 93.59999370574951,
+      "y": 254.66889190673828
+    },
+    "centreCorrect": true,
+    "circle": {
+      "radius": 607.542236328125,
+      "needed": 593.1220928414331,
+      "covered": true
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 360,
+    "height": 640,
+    "gallery": {
+      "x": 86.39999866485596,
+      "y": 193.1362075805664
+    },
+    "centreCorrect": true,
+    "circle": {
+      "radius": 496.0609130859375,
+      "needed": 484.16533088083986,
+      "covered": true
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 2560,
+    "height": 700,
+    "gallery": {
+      "x": 588.7999877929688,
+      "y": 204.25640106201172
+    },
+    "centreCorrect": true,
+    "circle": {
+      "radius": 1999.052490234375,
+      "needed": 1946.78939669347,
+      "covered": true
+    },
+    "errors": [],
+    "pass": true
+  }
+]
