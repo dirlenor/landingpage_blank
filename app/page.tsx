@@ -103,7 +103,7 @@ export default function Home() {
           defaults: { ease: 'expo.inOut' },
           scrollTrigger: {
             id: 'blank-master', trigger: host, pin: $('.stage')[0], start: 'top top', end: 'bottom bottom',
-            pinSpacing: false, scrub: .65, anticipatePin: 1, invalidateOnRefresh: true,
+            pinSpacing: false, scrub: .25, anticipatePin: 1, invalidateOnRefresh: true,
             onUpdate: self => { if (self.progress > .01 && entrance.progress() < 1) entrance.progress(1); },
           },
           onUpdate: () => {
@@ -120,11 +120,12 @@ export default function Home() {
         masterRef.current = master;
         master.addLabel('hero', 0).addLabel('immersive', 22).addLabel('statement', 38)
           .addLabel('gallery', 58).addLabel('cinematic', 77).addLabel('contact', 91);
-        master.to('.hero-person', { y: -15, duration: 12, ease: 'sine.inOut' }, 0)
-          .to('.environment img', { scale: 1.03, duration: 12, ease: 'sine.inOut' }, '<')
-          .to('.hero-scribble', { y: -18 * travel, rotation: 3, duration: 12 }, '<');
+        // Give the first scroll gesture a visible response before the scene opens.
+        master.to('.hero-person', { y: -22, scale: 1.04, duration: 4, ease: 'sine.inOut' }, 0)
+          .to('.environment img', { scale: 1.06, duration: 4, ease: 'sine.inOut' }, '<')
+          .to('.hero-scribble', { y: -24 * travel, rotation: 4, duration: 4 }, '<');
         // One foreground subject, one clean plate: the hero becomes the photograph.
-        master.to('.hero-left', { xPercent: -125, scale: 1.1, duration: 10 }, 12)
+        master.to('.hero-left', { xPercent: -125, scale: 1.1, duration: 10 }, 4)
           .to('.hero-right', { xPercent: 130, scale: 1.1, duration: 10 }, '<')
           .to('.hero-detail', { y: -80 * travel, opacity: 0, duration: 5 }, '<')
           .to('.environment', { clipPath: 'inset(0% 0% 0% 0%)', rotation: 0, duration: 10 }, '<')
