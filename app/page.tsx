@@ -65,10 +65,19 @@ export default function Home() {
   const [active, setActive] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [thai, setThai] = useState(false);
+  const [languageReady, setLanguageReady] = useState(false);
   const text = thai ? copy.th : copy.en;
   const chapters = chapterMeta.map((chapter, i) => ({ ...chapter, title: text.chapters[i] }));
 
-  useEffect(() => { document.documentElement.lang = thai ? 'th' : 'en'; }, [thai]);
+  useEffect(() => {
+    setThai(window.localStorage.getItem('blank-language') === 'th');
+    setLanguageReady(true);
+  }, []);
+  useEffect(() => {
+    if (!languageReady) return;
+    document.documentElement.lang = thai ? 'th' : 'en';
+    window.localStorage.setItem('blank-language', thai ? 'th' : 'en');
+  }, [thai, languageReady]);
 
   function jump(index: number) {
     menu.current?.close();
