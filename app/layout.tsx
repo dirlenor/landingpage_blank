@@ -3,6 +3,9 @@ import '@fontsource/anton/latin-400.css';
 import '@fontsource/manrope/latin-400.css';
 import '@fontsource/manrope/latin-600.css';
 import '@fontsource/manrope/latin-800.css';
+import '@fontsource/anuphan/400.css';
+import '@fontsource/anuphan/600.css';
+import '@fontsource/anuphan/700.css';
 import 'lenis/dist/lenis.css';
 import './globals.css';
 

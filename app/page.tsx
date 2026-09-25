@@ -1,18 +1,38 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
-const chapters = [
-  { id: 'hero', title: 'Good ideas', at: 0 },
-  { id: 'immersive', title: 'A wider perspective', at: .265 },
-  { id: 'statement', title: 'Our belief', at: .435 },
-  { id: 'gallery', title: 'Selected work', at: .625 },
-  { id: 'cinematic', title: 'Our approach', at: .815 },
-  { id: 'contact', title: 'Reach out', at: .951 },
+const chapterMeta = [
+  { id: 'hero', at: 0 }, { id: 'immersive', at: .265 }, { id: 'statement', at: .435 },
+  { id: 'gallery', at: .625 }, { id: 'cinematic', at: .815 }, { id: 'contact', at: .951 },
 ];
+const copy = {
+  en: {
+    chapters: ['Good ideas', 'A wider perspective', 'Our belief', 'Selected work', 'Our approach', 'Reach out'],
+    nav: ['WORK', 'ABOUT', 'JOURNAL', 'CONTACT'], studio: 'A CREATIVE STUDIO', language: 'ไทย', languageLabel: 'Switch to Thai', skip: 'Skip to contact', menuOpen: 'Open menu', scroll: 'SCROLL', exploreImmersive: 'Explore a wider perspective', exploreBelief: 'Explore our belief', exploreApproach: 'Explore our approach', email: 'Email BLANK studio',
+    heroLeft: ['GOOD', 'IDEAS'], heroRight: ['MOVE', 'PEOPLE'], heroCopy: ['WE CREATE', 'BRANDS, EXPERIENCES', 'AND STORIES THAT', 'MOVE PEOPLE.'],
+    heroNote: ['A MORE', 'HUMAN', 'CREATIVE', 'STUDIO'], heroCulture: ['IDEAS', 'CULTURE', 'PEOPLE'],
+    immersiveLabel: 'IMMERSIVE', immersiveTitle: ['A WIDER', 'PERSPECTIVE'], immersiveCopy: ['EXPLORING NEW PLACES.', 'NEW IDEAS AND A BRIGHTER', 'TOMORROW.'], immersiveAside: ['PEOPLE', 'PLACES', 'IDEAS'],
+    beliefLabel: 'OUR BELIEF', beliefCopy: ['CREATIVITY', 'FOR A BRIGHTER', 'TOMORROW.'], beliefTitle: ['WE CREATE', 'THINGS THAT', 'MOVE PEOPLE.'], stamp: ['IDEAS', 'INTO REALITY ↗'], beliefAside: ['BRANDS', 'EXPERIENCES', 'PEOPLE', 'CULTURE'],
+    galleryLabel: 'SELECTED WORK', galleryTitle: ['SELECTED', 'WORK'], galleryCopy: ['A COLLECTION', 'OF PROJECTS', 'THAT MOVE', 'PEOPLE.'],
+    approachLabel: 'OUR APPROACH', approachTitle: ['IDEAS', 'SHOULD', 'MOVE.'], approachCopy: ['BOLDER.', 'BRIGHTER.', 'KINDER.', 'HUMAN.'],
+    contactLabel: 'GET IN TOUCH', contactTitle: ['REACH', 'OUT.'], contactCopy: ['LET’S CREATE', 'A BRIGHTER', 'TOMORROW', 'TOGETHER.'], location: 'BANGKOK, THAILAND', back: 'BACK TO TOP ↑', menuClose: 'Close menu',
+  },
+  th: {
+    chapters: ['ไอเดียที่ดี', 'มุมมองที่กว้างขึ้น', 'ความเชื่อของเรา', 'ผลงานที่คัดสรร', 'แนวทางของเรา', 'มาคุยกัน'],
+    nav: ['ผลงาน', 'เกี่ยวกับเรา', 'บทความ', 'ติดต่อ'], studio: 'สตูดิโอสร้างสรรค์', language: 'EN', languageLabel: 'เปลี่ยนเป็นภาษาอังกฤษ', skip: 'ข้ามไปที่ติดต่อ', menuOpen: 'เปิดเมนู', scroll: 'เลื่อน', exploreImmersive: 'ดูมุมมองที่กว้างขึ้น', exploreBelief: 'ดูความเชื่อของเรา', exploreApproach: 'ดูแนวทางของเรา', email: 'อีเมลถึง BLANK studio',
+    heroLeft: ['ไอเดีย', 'ที่ดี'], heroRight: ['ขับเคลื่อน', 'ผู้คน'], heroCopy: ['เราสร้างแบรนด์', 'ประสบการณ์ และเรื่องราว', 'ที่ขับเคลื่อน', 'ผู้คน'],
+    heroNote: ['สตูดิโอสร้างสรรค์', 'ที่ให้ความสำคัญ', 'กับความเป็น', 'มนุษย์'], heroCulture: ['ไอเดีย', 'วัฒนธรรม', 'ผู้คน'],
+    immersiveLabel: 'มุมมอง', immersiveTitle: ['มองให้ไกล', 'กว่าเดิม'], immersiveCopy: ['สำรวจสถานที่ใหม่', 'ไอเดียใหม่ และวันพรุ่งนี้', 'ที่สดใสกว่า'], immersiveAside: ['ผู้คน', 'สถานที่', 'ไอเดีย'],
+    beliefLabel: 'ความเชื่อของเรา', beliefCopy: ['ความคิดสร้างสรรค์', 'เพื่อวันพรุ่งนี้', 'ที่สดใสกว่า'], beliefTitle: ['เราสร้างสิ่งที่', 'ขับเคลื่อน', 'ผู้คน'], stamp: ['ไอเดีย', 'สู่ความจริง ↗'], beliefAside: ['แบรนด์', 'ประสบการณ์', 'ผู้คน', 'วัฒนธรรม'],
+    galleryLabel: 'ผลงานที่คัดสรร', galleryTitle: ['ผลงาน', 'ที่คัดสรร'], galleryCopy: ['คอลเลกชัน', 'ของโปรเจกต์', 'ที่ขับเคลื่อน', 'ผู้คน'],
+    approachLabel: 'แนวทางของเรา', approachTitle: ['ไอเดีย', 'ควร', 'ขยับ'], approachCopy: ['กล้าขึ้น', 'สดใสขึ้น', 'อ่อนโยนขึ้น', 'เป็นมนุษย์'],
+    contactLabel: 'ติดต่อเรา', contactTitle: ['มาคุย', 'กัน'], contactCopy: ['มาสร้าง', 'วันพรุ่งนี้ที่สดใส', 'ไปด้วยกัน'], location: 'กรุงเทพฯ ประเทศไทย', back: 'กลับด้านบน ↑', menuClose: 'ปิดเมนู',
+  },
+} as const;
 const photos = [
   { src: 'surf', alt: 'A surfer carving through a blue wave', x: -.27, y: -.20, r: -13, mx: -.26, my: -.19 },
   { src: 'road', alt: 'A sports car on a winding coastal road', x: -.40, y: .05, r: 7, mx: -.32, my: .14 },
@@ -30,8 +50,11 @@ function Photo({ name, alt = '', className = '' }: { name: string; alt?: string;
 function Folio({ number, label }: { number: string; label: string }) {
   return <div className="folio"><span>{number}</span><span>{label}</span><i /></div>;
 }
-function Lines({ text, className = '' }: { text: string[]; className?: string }) {
+function Lines({ text, className = '' }: { text: readonly string[]; className?: string }) {
   return <h2 className={className}>{text.map(line => <span className="line-mask" key={line}><span className="line">{line}</span></span>)}</h2>;
+}
+function LineBreaks({ lines }: { lines: readonly string[] }) {
+  return <>{lines.map((line, i) => <Fragment key={line}>{line}{i < lines.length - 1 && <br />}</Fragment>)}</>;
 }
 
 export default function Home() {
@@ -41,6 +64,11 @@ export default function Home() {
   const lenisRef = useRef<Lenis | null>(null);
   const [active, setActive] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [thai, setThai] = useState(false);
+  const text = thai ? copy.th : copy.en;
+  const chapters = chapterMeta.map((chapter, i) => ({ ...chapter, title: text.chapters[i] }));
+
+  useEffect(() => { document.documentElement.lang = thai ? 'th' : 'en'; }, [thai]);
 
   function jump(index: number) {
     menu.current?.close();
@@ -235,14 +263,15 @@ export default function Home() {
   }, []);
 
   return <>
-    <a className="skip-link" href="#contact" onClick={e => { e.preventDefault(); jump(5); }}>Skip to contact</a>
+    <a className="skip-link" href="#contact" onClick={e => { e.preventDefault(); jump(5); }}>{text.skip}</a>
     <header className={`site-header ${active > 0 ? 'quiet' : ''} ${active === 4 || active === 5 ? 'light' : ''}`}>
       <a className="wordmark" href="#hero" onClick={e => { e.preventDefault(); jump(0); }} aria-label="BLANK home">BLANK.</a>
       <nav aria-label="Primary navigation">
-        {[['WORK', 3], ['ABOUT', 2], ['JOURNAL', 4], ['CONTACT', 5]].map(([name, index]) => <a key={name} href={`#${chapters[Number(index)].id}`} onClick={e => { e.preventDefault(); jump(Number(index)); }}>{name}</a>)}
+        {text.nav.map((name, i) => <a key={name} href={`#${chapters[[3, 2, 4, 5][i]].id}`} onClick={e => { e.preventDefault(); jump([3, 2, 4, 5][i]); }}>{name}</a>)}
       </nav>
-      <span className="studio-label">A CREATIVE STUDIO</span>
-      <button className="menu-toggle" aria-label="Open menu" aria-expanded={menuOpen} aria-controls="chapter-menu" onClick={() => { menu.current?.showModal(); setMenuOpen(true); lenisRef.current?.stop(); }}><span /><span /></button>
+      <span className="studio-label">{text.studio}</span>
+      <button className="language-toggle" type="button" aria-label={text.languageLabel} onClick={() => setThai(value => !value)}>{text.language}</button>
+      <button className="menu-toggle" aria-label={text.menuOpen} aria-expanded={menuOpen} aria-controls="chapter-menu" onClick={() => { menu.current?.showModal(); setMenuOpen(true); lenisRef.current?.stop(); }}><span /><span /></button>
     </header>
 
     <main ref={root} className="experience is-cinematic" data-scene="1">
@@ -255,58 +284,58 @@ export default function Home() {
         <section id="hero" tabIndex={-1} className="scene scene-01" aria-labelledby="hero-heading">
           <span className="hero-number hero-detail">01</span>
           <h1 id="hero-heading" className="hero-heading">
-            <span className="hero-left"><span className="word-mask"><span className="word">GOOD</span></span><span className="word-mask"><span className="word">IDEAS</span></span></span>
-            <span className="hero-right"><span className="word-mask"><span className="word">MOVE</span></span><span className="word-mask"><span className="word">PEOPLE</span></span></span>
+            <span className="hero-left">{text.heroLeft.map(word => <span className="word-mask" key={word}><span className="word">{word}</span></span>)}</span>
+            <span className="hero-right">{text.heroRight.map(word => <span className="word-mask" key={word}><span className="word">{word}</span></span>)}</span>
           </h1>
-          <p className="hero-copy micro hero-detail">WE CREATE<br />BRANDS, EXPERIENCES<br />AND STORIES THAT<br />MOVE PEOPLE.</p>
-          <p className="hero-note handwritten hero-detail">A MORE<br />HUMAN<br />CREATIVE<br />STUDIO</p>
-          <p className="culture-note handwritten hero-detail">IDEAS<br />CULTURE<br />PEOPLE</p>
+          <p className="hero-copy micro hero-detail"><LineBreaks lines={text.heroCopy} /></p>
+          <p className="hero-note handwritten hero-detail"><LineBreaks lines={text.heroNote} /></p>
+          <p className="culture-note handwritten hero-detail"><LineBreaks lines={text.heroCulture} /></p>
           <svg className="hero-scribble hero-detail" viewBox="0 0 260 360" fill="none" aria-hidden="true"><path d="M204 4C179 36 68 166 96 176S244 90 224 122 54 253 92 259 197 220 159 261 8 350 16 329" stroke="currentColor" strokeWidth="2" /></svg>
-          <button className="hero-next round-arrow hero-detail" aria-label="Explore a wider perspective" onClick={() => jump(1)}>↘</button>
-          <div className="scroll-cue hero-detail"><span>SCROLL</span><i /><span>↓</span></div>
+          <button className="hero-next round-arrow hero-detail" aria-label={text.exploreImmersive} onClick={() => jump(1)}>↘</button>
+          <div className="scroll-cue hero-detail"><span>{text.scroll}</span><i /><span>↓</span></div>
         </section>
 
         <section id="immersive" tabIndex={-1} className="scene scene-02" aria-labelledby="immersive-heading">
-          <Folio number="02" label="IMMERSIVE" />
-          <div className="immersive-copy"><h2 id="immersive-heading" className="immersive-title">A WIDER<br />PERSPECTIVE</h2><p className="micro immersive-detail">EXPLORING NEW PLACES.<br />NEW IDEAS AND A BRIGHTER<br />TOMORROW.</p></div>
-          <p className="immersive-aside immersive-detail">PEOPLE<br />PLACES<br />IDEAS</p>
-          <button className="immersive-next round-arrow immersive-detail" aria-label="Explore our belief" onClick={() => jump(2)}>↗</button>
+          <Folio number="02" label={text.immersiveLabel} />
+          <div className="immersive-copy"><h2 id="immersive-heading" className="immersive-title"><LineBreaks lines={text.immersiveTitle} /></h2><p className="micro immersive-detail"><LineBreaks lines={text.immersiveCopy} /></p></div>
+          <p className="immersive-aside immersive-detail"><LineBreaks lines={text.immersiveAside} /></p>
+          <button className="immersive-next round-arrow immersive-detail" aria-label={text.exploreBelief} onClick={() => jump(2)}>↗</button>
         </section>
 
         <section id="statement" tabIndex={-1} className="scene scene-03" aria-label="Our belief">
-          <Folio number="03" label="OUR BELIEF" />
-          <p className="belief-copy micro">CREATIVITY<br />FOR A BRIGHTER<br />TOMORROW.</p>
-          <Lines className="statement-title display" text={['WE CREATE', 'THINGS THAT', 'MOVE PEOPLE.']} />
+          <Folio number="03" label={text.beliefLabel} />
+          <p className="belief-copy micro"><LineBreaks lines={text.beliefCopy} /></p>
+          <Lines className="statement-title display" text={text.beliefTitle} />
           <div className="support-photo"><Photo name="coast" alt="A portrait at sunset" /></div>
-          <div className="statement-stamp statement-note handwritten">IDEAS<br />INTO REALITY ↗</div>
-          <p className="statement-aside statement-note handwritten">BRANDS<br />EXPERIENCES<br />PEOPLE<br />CULTURE</p>
+          <div className="statement-stamp statement-note handwritten"><LineBreaks lines={text.stamp} /></div>
+          <p className="statement-aside statement-note handwritten"><LineBreaks lines={text.beliefAside} /></p>
           <Photo className="static-portrait" name="motion-cutout" alt="A fashion portrait in motion" />
         </section>
 
         <div className="origin-portrait" aria-hidden="true"><div className="origin-backplate"><Photo name="alpine" /></div><Photo className="origin-cutout" name="motion-cutout" /></div>
 
         <section id="gallery" tabIndex={-1} className="scene scene-04" aria-label="Selected work">
-          <Folio number="04" label="SELECTED WORK" />
-          <h2 className="gallery-title display">SELECTED<br />WORK</h2>
-          <p className="gallery-aside micro">A COLLECTION<br />OF PROJECTS<br />THAT MOVE<br />PEOPLE.</p>
+          <Folio number="04" label={text.galleryLabel} />
+          <h2 className="gallery-title display"><LineBreaks lines={text.galleryTitle} /></h2>
+          <p className="gallery-aside micro"><LineBreaks lines={text.galleryCopy} /></p>
           {photos.map((photo, i) => <figure className={`gallery-card card-${i}`} key={i}><Photo name={photo.src} alt={photo.alt} /></figure>)}
-          <button className="gallery-next round-arrow" aria-label="Explore our approach" onClick={() => jump(4)}>↗</button>
+          <button className="gallery-next round-arrow" aria-label={text.exploreApproach} onClick={() => jump(4)}>↗</button>
         </section>
 
         <div className="selected-photo" aria-hidden="true"><Photo className="selected-image" name="coast" /></div>
         <section id="cinematic" tabIndex={-1} className="scene scene-05" aria-label="Our approach">
-          <Folio number="05" label="OUR APPROACH" />
-          <Lines className="cinematic-title" text={['IDEAS', 'SHOULD', 'MOVE.']} />
-          <p className="cinematic-detail micro">BOLDER.<br />BRIGHTER.<br />KINDER.<br />HUMAN.</p>
+          <Folio number="05" label={text.approachLabel} />
+          <Lines className="cinematic-title" text={text.approachTitle} />
+          <p className="cinematic-detail micro"><LineBreaks lines={text.approachCopy} /></p>
           <span className="cinematic-rule cinematic-detail" />
         </section>
 
         <section id="contact" tabIndex={-1} className="scene scene-06" aria-label="Get in touch">
-          <Folio number="06" label="GET IN TOUCH" />
-          <h2 className="contact-title"><span className="contact-reach">REACH</span><span className="contact-out">OUT.</span></h2>
-          <p className="contact-invite micro contact-details">LET’S CREATE<br />A BRIGHTER<br />TOMORROW<br />TOGETHER.</p>
-          <a className="contact-arrow round-arrow contact-details" href="mailto:hello@blank.studio" aria-label="Email BLANK studio">↗</a>
-          <div className="contact-bottom contact-details"><a href="mailto:hello@blank.studio">HELLO@BLANK.STUDIO <span>↗</span></a><span>BANGKOK, THAILAND</span><button onClick={() => jump(0)}>BACK TO TOP ↑</button></div>
+          <Folio number="06" label={text.contactLabel} />
+          <h2 className="contact-title"><span className="contact-reach">{text.contactTitle[0]}</span><span className="contact-out">{text.contactTitle[1]}</span></h2>
+          <p className="contact-invite micro contact-details"><LineBreaks lines={text.contactCopy} /></p>
+          <a className="contact-arrow round-arrow contact-details" href="mailto:hello@blank.studio" aria-label={text.email}>↗</a>
+          <div className="contact-bottom contact-details"><a href="mailto:hello@blank.studio">HELLO@BLANK.STUDIO <span>↗</span></a><span>{text.location}</span><button onClick={() => jump(0)}>{text.back}</button></div>
           <div className="landscape-circle" aria-hidden="true"><Photo name="sunset" /><span className="orbit" /></div>
         </section>
         <div className="progress-track" aria-hidden="true"><div className="progress-fill" /></div>
@@ -314,9 +343,9 @@ export default function Home() {
     </main>
 
     <dialog id="chapter-menu" className="chapter-menu" ref={menu} onClick={e => { if (e.target === e.currentTarget) menu.current?.close(); }}>
-      <div className="menu-top"><span className="wordmark">BLANK.</span><button className="round-arrow" autoFocus aria-label="Close menu" onClick={() => menu.current?.close()}>×</button></div>
+      <div className="menu-top"><span className="wordmark">BLANK.</span><button className="round-arrow" autoFocus aria-label={text.menuClose} onClick={() => menu.current?.close()}>×</button></div>
       <nav aria-label="Scene navigation">{chapters.map((chapter, i) => <button key={chapter.id} onClick={() => jump(i)}><span>0{i + 1}</span>{chapter.title}<span>↗</span></button>)}</nav>
-      <p className="micro">IDEAS. CULTURE. PEOPLE.</p>
+      <p className="micro"><LineBreaks lines={text.heroCulture} /></p>
     </dialog>
   </>;
 }
