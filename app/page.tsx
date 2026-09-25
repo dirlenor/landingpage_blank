@@ -91,6 +91,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if (!languageReady) return;
     gsap.registerPlugin(ScrollTrigger);
     const host = root.current!;
     const mm = gsap.matchMedia();
@@ -261,7 +262,7 @@ export default function Home() {
       });
     }, root);
     return () => { disposed = true; mm.revert(); ctx.revert(); };
-  }, []);
+  }, [languageReady]);
 
   useEffect(() => {
     const dialog = menu.current;
